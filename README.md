@@ -1,4 +1,4 @@
-# catalyst-cantica-knowledge-base
+# catalyst-knowledge-base
 
 A catalyst process module with one purpose: building and maintaining **knowledge bases**: a project's, from any
 information outside catalyst, or a **reflective** one of the Cantica ecosystem (the kernel, its modules, its
@@ -21,5 +21,5 @@ unmarked. A build contains nothing above its ceiling, and a document reaches a h
 what its knowledge base allows.
 
 Install it with `catalyst module install <this repository>`, beside another module or as a deployment's first, or
-with `catalyst init --module cantica-knowledge-base`. It needs kernel 0.102.0 or later. It is catalyst's second
+with `catalyst init --module knowledge-base`. It needs kernel 0.102.0 or later. It is catalyst's second
 production module, the proof in catalyst's CI that the kernel names no module type.

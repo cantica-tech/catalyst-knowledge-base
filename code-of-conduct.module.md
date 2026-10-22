@@ -1,9 +1,9 @@
-# Code of Conduct — `cantica-knowledge-base` module contribution
+# Code of Conduct — `knowledge-base` module contribution
 
 > Composed into each deployment's `CODE-OF-CONDUCT.md` (`MODULE-SPECIFICATION.md`
 > §6.2): the `## 3.` section below is inserted at the end of the deployed §3,
 > and the `## 4.` section at the end of the deployed §4, each under a
-> `### From module cantica-knowledge-base` heading.
+> `### From module knowledge-base` heading.
 
 ## 3. Standard document types
 
@@ -16,7 +16,7 @@
 What each needs and when it closes: `Rules-of-Rules.md`, the module's part
 (KB-L1, `rr-KB-001` to `rr-KB-006`). How a knowledge base's repository, its
 documents, its pointers and its builds are laid out: the module's `GUIDE.md`
-(`modules/cantica-knowledge-base/GUIDE.md` in the criterion).
+(`modules/knowledge-base/GUIDE.md` in the criterion).
 
 ## 4. Slash-command entry points
 

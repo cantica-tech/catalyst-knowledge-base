@@ -1,8 +1,8 @@
-# Rules of Rules — cantica-knowledge-base module
+# Rules of Rules — knowledge-base module
 
 > Module contribution (`MODULE-SPECIFICATION.md` §6.1): appended to the
 > deployed `rules/Rules-of-Rules.md`, after the kernel's handbook, under
-> `### From module cantica-knowledge-base`. It never replaces kernel content.
+> `### From module knowledge-base`. It never replaces kernel content.
 > Its meta-rules are numbered in the module's namespace, `rr-KB-NNN`.
 
 This module has one purpose: building and maintaining knowledge bases. A

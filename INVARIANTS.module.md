@@ -1,6 +1,6 @@
-# Cantica Knowledge Base Module Laws and Invariants
+# Knowledge Base Module Laws and Invariants
 
-The law the `cantica-knowledge-base` module adds to catalyst's ten (the
+The law the `knowledge-base` module adds to catalyst's ten (the
 kernel's `INVARIANTS.md`). This file extends the kernel's and never
 overrides it (`MODULE-SPECIFICATION.md` §6.4).
 

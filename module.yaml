@@ -1,6 +1,6 @@
-id: cantica-knowledge-base
-name: Cantica Knowledge Base Module
-version: 0.1.0
+id: knowledge-base
+name: Knowledge Base Module
+version: 0.2.0
 description: A process module with one purpose, building and maintaining knowledge bases — a project's, from any information outside catalyst, or a reflective one of the Cantica ecosystem — as a classified markdown repository with fresh pointers and versioned vector databases.
 grounding_type: rule
 format: 3
