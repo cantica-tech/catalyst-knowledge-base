@@ -1,0 +1,9 @@
+{
+  "id": "knowledge-base",
+  "name": "Knowledge Base Module",
+  "version": "0.2.0",
+  "description": "A process module with one purpose, building and maintaining knowledge bases \u2014 a project's, from any information outside catalyst, or a reflective one of the Cantica ecosystem \u2014 as a classified markdown repository with fresh pointers and versioned vector databases.",
+  "kernelVersion": ">=0.102.0",
+  "frameworkVersion": ">=0.102.0",
+  "entry": "ui/index.js"
+}
