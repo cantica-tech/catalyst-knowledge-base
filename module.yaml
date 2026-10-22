@@ -1,0 +1,220 @@
+id: cantica-knowledge-base
+name: Cantica Knowledge Base Module
+version: 0.1.0
+description: A process module with one purpose, building and maintaining knowledge bases — a project's, from any information outside catalyst, or a reflective one of the Cantica ecosystem — as a classified markdown repository with fresh pointers and versioned vector databases.
+grounding_type: rule
+format: 3
+
+# The module's own meta-rules and invariants: rr-KB-NNN and INV-KB-n.
+namespace: KB
+kernel_version: ">=0.102.0"
+
+# Ceremony tiers (rr-META-006): a chore needs no artifact; establishing or
+# changing a knowledge base is a KB; producing a vector database is a KBUILD.
+tiers:
+  - id: chore
+    artifact: none
+    commit: "chore:"
+  - id: kb
+    artifact: KB
+  - id: build
+    artifact: KBUILD
+
+entities:
+  KB:
+    name: "Knowledge base"
+    plural: "Knowledge bases"
+    folder: knowledge-bases
+    grounding: required
+    grounding_field: Serves
+    status_hint: "exactly one of `Proposed` / `Established` / `Active` / `Frozen` / `Retired` (starts `Proposed`; `Retired` is its closed state)"
+    fields:
+      Serves:
+        kind: ref-list
+        required: true
+        to: rule
+        hint: "the rule IDs this knowledge base exists for — **required**: a knowledge base is grounded in what it must make known"
+      Kind:
+        kind: enum
+        required: true
+        values: [Project, Reflective]
+        hint: "exactly one of `Project` (any information outside catalyst) / `Reflective` (the Cantica ecosystem only: kernel, modules, plugins)"
+      Classification:
+        kind: enum
+        required: true
+        values: [Public, Internal, Confidential, Restricted]
+        hint: "exactly one of `Public` / `Internal` / `Confidential` / `Restricted`: the floor of everything in it"
+      Default classification:
+        kind: enum
+        required: true
+        values: [Public, Internal, Confidential, Restricted]
+        hint: "the policy: the mark given to a document or pointer that is new, imported or unmarked, before the floor applies"
+      Hosted embedding up to:
+        kind: enum
+        required: true
+        values: [None, Public, Internal, Confidential, Restricted]
+        hint: "the highest classification a hosted embedding service may receive; anything above is embedded only by a local model (`None`: local only)"
+      Repository:
+        kind: text
+        required: true
+        hint: "the knowledge base's own repository: a git URL, or a path on this machine"
+      Freshness:
+        kind: text
+        required: true
+        hint: "how often its pointers and sources are checked, e.g. `30 days`"
+      Curator:
+        kind: user
+        hint: "the registered user answerable for it (a `Knowledge Curator`)"
+      Sources:
+        kind: ref-list
+        to: KSOURCE
+        hint: "`KSOURCE-NNNNNN` list it draws from — back-populated from each source's `Knowledge base`, never hand-edited"
+      Builds:
+        kind: ref-list
+        to: KBUILD
+        hint: "`KBUILD-NNNNNN` list of its vector databases — back-populated from each build's `Knowledge base`, never hand-edited"
+    states: [Proposed, Established, Active, Frozen, Retired]
+    initial: Proposed
+    closed: [Retired]
+    guards:
+      Established:
+        - section_written: Structure
+      Active:
+        - section_written: Policy
+        - section_written: Maintenance
+    sections:
+      - Scope: |
+          What it covers and for whom, and what it leaves out.
+      - Structure: |
+          The repository's directory tree, one line per top-level directory,
+          and where its pointers live (`GUIDE.md`, "The repository").
+      - Policy: |
+          Its classification and default classification, and why; any
+          source whose documents are marked otherwise; the embedding backend
+          allowed for each classification.
+      - Maintenance: |
+          Who maintains it, how often pointers and sources are checked
+          (`Freshness`), when it is rebuilt, and what retires it.
+      - Related: |
+          Other `KB-` IDs it overlaps, feeds or replaces.
+    definition: "A `KB-NNNNNN` records one knowledge base: the rules it serves (`Serves`, required), whether it is a project's or reflective of the Cantica ecosystem, its classification (the floor of everything in it), its policy for new, imported and unmarked documents, the highest classification a hosted embedding service may receive, its repository, how often it is refreshed, and its curator. Its sources and builds cite it back. It is not `Active` without its Policy and Maintenance written. Lives in `knowledge-bases/`, registered in `knowledge-bases.md`."
+  KSOURCE:
+    name: "Knowledge source"
+    plural: "Knowledge sources"
+    folder: kb-sources
+    grounding: inherited
+    grounding_field: Knowledge base
+    status_hint: "exactly one of `Active` / `Stale` / `Broken` / `Retired` (starts `Active`; `Retired` is its closed state)"
+    fields:
+      Knowledge base:
+        kind: ref
+        required: true
+        to: KB
+        backref: Sources
+        hint: "the `KB-NNNNNN` it feeds; cited back in the knowledge base's `Sources`"
+      Location:
+        kind: text
+        required: true
+        hint: "where it is: a repository, a site, a drive folder, a wiki space (a URL or a path)"
+      Classification:
+        kind: enum
+        values: [Unmarked, Public, Internal, Confidential, Restricted]
+        hint: "the mark its documents and pointers get on import; `Unmarked`: the knowledge base's default classification"
+      Access:
+        kind: text
+        hint: "how it is read: public, a token named in the curator's environment, an export by hand (never the secret itself)"
+      Checked:
+        kind: date
+        hint: "YYYY-MM-DD: when it was last checked by `/kb-refresh`"
+    states: [Active, Stale, Broken, Retired]
+    initial: Active
+    closed: [Retired]
+    sections:
+      - Description: |
+          What it holds, who owns it, and which part of it the knowledge base
+          draws on.
+      - Import: |
+          How its documents become the knowledge base's: copied as markdown,
+          summarised, or kept as pointers; which directories they go to.
+      - Related: |
+          Other `KSOURCE-` IDs it mirrors or replaces.
+    definition: "A `KSOURCE-NNNNNN` records one source a knowledge base draws from: where it is, how it is read, the classification its documents get on import (or the knowledge base's default), and when it was last checked. It is `Stale` when not checked within the knowledge base's `Freshness`, `Broken` when it cannot be read, and retired in place, never deleted. Lives in `kb-sources/`, registered in `kb-sources.md`."
+  KBUILD:
+    name: "Knowledge build"
+    plural: "Knowledge builds"
+    folder: kb-builds
+    grounding: inherited
+    grounding_field: Knowledge base
+    status_hint: "exactly one of `Planned` / `Built` / `Published` / `Superseded` / `Withdrawn` (starts `Planned`; `Superseded` and `Withdrawn` are its closed states)"
+    fields:
+      Knowledge base:
+        kind: ref
+        required: true
+        to: KB
+        backref: Builds
+        hint: "the `KB-NNNNNN` it is a vector database of; cited back in the knowledge base's `Builds`"
+      Version:
+        kind: text
+        required: true
+        hint: "the build's version, `MAJOR.MINOR.PATCH`, unique in its knowledge base"
+      Ceiling:
+        kind: enum
+        required: true
+        values: [Public, Internal, Confidential, Restricted]
+        hint: "the highest classification it may contain; a document classified above is left out"
+      Classification:
+        kind: enum
+        values: [Public, Internal, Confidential, Restricted]
+        hint: "what it is classified, once built: the highest classification of what it contains (never above `Ceiling`)"
+      Embedding model:
+        kind: text
+        required: true
+        hint: "the model and its version, and where it ran (`local` or the hosted service's name)"
+      Content commit:
+        kind: text
+        hint: "the knowledge base repository's commit it was built from"
+      Location:
+        kind: text
+        hint: "where the build is kept: a release asset, a bucket, a path (`GUIDE.md`, \"A build\")"
+    states: [Planned, Built, Published, Superseded, Withdrawn]
+    initial: Planned
+    closed: [Superseded, Withdrawn]
+    guards:
+      Published:
+        - section_written: Verification
+    sections:
+      - Contents: |
+          What it contains: documents and pointers counted by classification,
+          and what the ceiling left out.
+      - Verification: |
+          How it was checked before publishing: its manifest's checksums, a
+          sample of queries and what they returned, and that nothing in it is
+          classified above its ceiling. A build is not `Published` without it.
+      - Related: |
+          The `KBUILD-` it supersedes.
+    definition: "A `KBUILD-NNNNNN` records one versioned vector database of a knowledge base: its version, its ceiling (the highest classification it may contain), its own classification once built, the embedding model and where it ran, the repository commit it was built from, and where it is kept. It is not `Published` without its Verification; it is superseded or withdrawn, never deleted. Lives in `kb-builds/`, registered in `kb-builds.md`."
+
+commands:
+  - name: kb-setup
+    description: Establish a knowledge base, its repository, its policy and its curator
+    argument_hint: "project|reflective <title>"
+  - name: kb-import
+    description: Bring a source's documents into a knowledge base, classified by its policy
+    argument_hint: "<KSOURCE-id>"
+  - name: kb-classify
+    description: Mark a document or pointer of a knowledge base with a classification
+    argument_hint: "<path> public|internal|confidential|restricted"
+  - name: kb-refresh
+    description: Check a knowledge base's pointers and sources, and mark what is stale or broken
+    argument_hint: "<KB-id>"
+  - name: kb-build
+    description: Build a versioned vector database of a knowledge base, within a ceiling
+    argument_hint: "<KB-id> [<ceiling>]"
+  - name: kb-audit
+    description: Report a knowledge base's unmarked, stale and over-classified content, and its builds
+
+contributions:
+  rules_of_rules: rules-of-rules.module.md
+  code_of_conduct: code-of-conduct.module.md
+  invariants: INVARIANTS.module.md
+  migrations: migrations/
