@@ -1,13 +1,13 @@
 id: knowledge-base
 name: Knowledge Base Module
-version: 0.2.0
+version: 0.3.0
 description: A process module with one purpose, building and maintaining knowledge bases — a project's, from any information outside catalyst, or a reflective one of the Cantica ecosystem — as a classified markdown repository with fresh pointers and versioned vector databases.
 grounding_type: rule
 format: 3
 
 # The module's own meta-rules and invariants: rr-KB-NNN and INV-KB-n.
 namespace: KB
-kernel_version: ">=0.102.0"
+kernel_version: ">=0.104.0"
 
 # Ceremony tiers (rr-META-006): a chore needs no artifact; establishing or
 # changing a knowledge base is a KB; producing a vector database is a KBUILD.
@@ -82,6 +82,7 @@ entities:
       Active:
         - section_written: Policy
         - section_written: Maintenance
+        - holds: "Curator is set"
     sections:
       - Scope: |
           What it covers and for whom, and what it leaves out.
@@ -126,9 +127,13 @@ entities:
       Checked:
         kind: date
         hint: "YYYY-MM-DD: when it was last checked by `/kb-refresh`"
+      Next check:
+        kind: date
+        hint: "YYYY-MM-DD: when it is due again — `Checked` plus its knowledge base's `Freshness`, set by `/kb-refresh`"
     states: [Active, Stale, Broken, Retired]
     initial: Active
     closed: [Retired]
+    due: "Next check"
     sections:
       - Description: |
           What it holds, who owns it, and which part of it the knowledge base
@@ -182,6 +187,7 @@ entities:
     guards:
       Published:
         - section_written: Verification
+        - holds: "Classification is set"
     sections:
       - Contents: |
           What it contains: documents and pointers counted by classification,

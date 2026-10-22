@@ -23,3 +23,6 @@ overrides it (`MODULE-SPECIFICATION.md` §6.4).
 | INV-KB-2 an active knowledge base has its policy | KB-L1 | the `Active` guard (`section_written: Policy`, `Maintenance`) |
 | INV-KB-3 a published build has its verification | KB-L1 | the `Published` guard (`section_written: Verification`) |
 | INV-KB-4 nothing unmarked, nothing over its ceiling | KB-L1 | `/kb-audit`; `/kb-build` refuses an unmarked document |
+| INV-KB-5 an active knowledge base has its curator; a published build its classification | KB-L1 | the `Active` and `Published` guards (`holds`) |
+| INV-KB-6 a source past its next check is overdue | L1 | `due: "Next check"`: `catalyst inbox`, `catalyst check` |
+| INV-KB-7 builds move as their workflow says; a sensitive build needs two curators | L4 | a governing `WORKFLOW-`; a gate with `when` (kernel 0.104.0) |

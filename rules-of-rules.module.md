@@ -69,3 +69,13 @@ refreshed and rebuilt when one of them is released.
 Importing, classifying and building are a `Knowledge Curator`'s or an
 `Admin`'s; anyone may refresh pointers and audit. An agent proposes a
 classification and never lowers one on its own (L4).
+
+## 7. `rr-KB-007` A knowledge base's builds move as its workflow says
+
+A deployment governs its knowledge bases' builds (and may govern its
+knowledge bases) with an `Active` `WORKFLOW-` (`GUIDE.md`, "Governance"):
+each move names the role that makes it and, where it matters, the
+classification it is allowed at. A build classified `Confidential` or above
+is published only with two curators' approvals (a gate), neither of them its
+author. A source is due for its next check at its `Next check`; one past it
+is overdue, and waits in the inbox for the role the workflow escalates to.

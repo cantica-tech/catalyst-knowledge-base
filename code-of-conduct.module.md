@@ -14,7 +14,7 @@
 | Knowledge build | `kb-builds/` | `KBUILD-` | its knowledge base (`Knowledge base`) |
 
 What each needs and when it closes: `Rules-of-Rules.md`, the module's part
-(KB-L1, `rr-KB-001` to `rr-KB-006`). How a knowledge base's repository, its
+(KB-L1, `rr-KB-001` to `rr-KB-007`). How a knowledge base's repository, its
 documents, its pointers and its builds are laid out: the module's `GUIDE.md`
 (`modules/knowledge-base/GUIDE.md` in the criterion).
 
@@ -69,7 +69,13 @@ When the user enters `/kb-setup <kind> <title>`:
    classification and its policy. A new repository is the user's to create or
    push: ask before any push (L3).
 5. Write the Scope and Structure, then set it `Established`. Its Policy and
-   Maintenance are written next, and it becomes `Active` (`rr-KB-001`).
+   Maintenance are written next, and, with its curator named, it becomes
+   `Active` (`rr-KB-001`).
+6. Offer the governance `GUIDE.md` gives ("Governance"), each only with the
+   user's assent (`rr-KB-007`): a `WORKFLOW-` governing `KBUILD` (and one
+   governing `KB`), from its Transitions table, made `Active`; and the gate
+   that asks two curators to publish a build classified `Confidential` or
+   above, added to `IAM/gates.json`, journaled.
 
 When the user enters `/create knowledge-source <title>` or `/create-knowledge-source <title>`, run
 `catalyst new KSOURCE --title "<t>" --field "Knowledge base=<KB-id>"
@@ -99,8 +105,10 @@ When the user enters `/kb-refresh <KB-id>`, for each pointer in its
 repository, check that its target still answers and whether its content
 changed (an HTTP request, or the file's or the repository's state); update
 `checked`, and set `status` to `ok`, `moved` (with the new location) or
-`broken`. For each `KSOURCE-` of it, set `Checked` and, with `catalyst status
-set`, `Stale` or `Broken` when it is, or back to `Active`. Report what changed;
+`broken`. For each `KSOURCE-` of it, set `Checked` to today and `Next check`
+to today plus the knowledge base's `Freshness`, journaled, and, with
+`catalyst status set`, `Stale` or `Broken` when it is, or back to `Active`.
+A source past its `Next check` is listed by `catalyst inbox` as `overdue`. Report what changed;
 never delete a pointer — a broken one stays, marked, until a person removes
 or replaces it.
 

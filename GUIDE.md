@@ -1,7 +1,7 @@
 # Knowledge bases: establishing and maintaining them
 
 How a knowledge base is established, laid out, kept fresh and built into vector databases. The rules behind each step
-are the module's meta-rules (`rr-KB-001` to `rr-KB-006`); the commands that carry them out are in
+are the module's meta-rules (`rr-KB-001` to `rr-KB-007`); the commands that carry them out are in
 `CODE-OF-CONDUCT.md` §4.
 
 ## Two kinds
@@ -52,6 +52,37 @@ Four levels, lowest to highest: `Public` < `Internal` < `Confidential` < `Restri
 | When content has moved on | `/kb-build`: a new version; the previous one `Superseded` once the new one is `Published` |
 | A reflective knowledge base | Refreshed and rebuilt at each release of the kernel or a module |
 | When it is no longer needed | `Frozen` (kept, not changed), then `Retired`; its builds withdrawn or superseded, never deleted |
+
+## Governance
+
+Catalyst enforces what this section sets up (kernel 0.104.0, `CLI.md` "Workflow governance"). `/kb-setup` offers each
+part; none is added without the owner's assent.
+
+- **Freshness:** each source's `Next check` is its last check plus its knowledge base's `Freshness`; past it, the
+  source is `overdue` in `catalyst inbox`, escalated to the role its workflow names.
+- **A workflow governing builds:** a `WORKFLOW-` with `Governs: KBUILD`, `Escalates to: Knowledge Curator`, made
+  `Active`, its Transitions table:
+
+  | From | To | Role | When |
+  |---|---|---|---|
+  | Planned | Built | Knowledge Curator | |
+  | Built | Published | Knowledge Curator | Classification at most Internal |
+  | Built | Published | Admin | |
+  | Published | Superseded | Knowledge Curator | |
+  | * | Withdrawn | Knowledge Curator | |
+
+  A curator publishes a public or internal build; a confidential or restricted one is published by an `Admin`, after
+  the gate below. Catalyst refuses any other move, and `--force` does not pass it.
+- **A gate on sensitive builds**, in `IAM/gates.json`:
+
+  ```json
+  {"id": "kb-sensitive-build", "covers": {"type": "KBUILD", "to": "Published"},
+   "when": "Classification at least Confidential", "approvals": 2, "role": "Knowledge Curator"}
+  ```
+
+  Two curators approve the build's exact version, neither its author (L4).
+- **A workflow governing knowledge bases** (optional): `Governs: KB`, its moves `Proposed → Established →
+  Active → Frozen → Retired` each by a `Knowledge Curator`, `Retired` by an `Admin`.
 
 ## The repository
 
