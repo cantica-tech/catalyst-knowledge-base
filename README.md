@@ -10,6 +10,9 @@ from which versioned vector databases are built for models to ingest.
   sources (`KSOURCE-`) and their builds (`KBUILD-`), and its commands.
 - **`GUIDE.md`**: how a knowledge base is established and maintained; its classification; the layout of its
   repository, of a document, of a pointer and of a build.
+- **`docs/best-practices.md`**: current practice for AI knowledge bases (sources, chunking, retrieval, embeddings,
+  freshness, classification, evaluation), with sources, mapped to this module; and how to build one from a catalyst
+  criterion.
 - **`rules-of-rules.module.md`**: its meta-rules, composed into the deployed `Rules-of-Rules.md`.
 - **`code-of-conduct.module.md`**: its document types and commands (`/kb-setup`, `/kb-import`, `/kb-classify`,
   `/kb-refresh`, `/kb-build`, `/kb-audit`), composed into the deployed `CODE-OF-CONDUCT.md`.

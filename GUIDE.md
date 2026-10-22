@@ -4,6 +4,8 @@ How a knowledge base is established, laid out, kept fresh and built into vector 
 are the module's meta-rules (`rr-KB-001` to `rr-KB-007`); the commands that carry them out are in
 `CODE-OF-CONDUCT.md` §4.
 
+Why each step is what it is, with the research behind it: [`docs/best-practices.md`](docs/best-practices.md).
+
 ## Two kinds
 
 | Kind | What it draws on | Typical classification |
