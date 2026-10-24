@@ -70,7 +70,7 @@ happens, whether this module is alone or beside others; every choice is the user
    `Static` (defined once; it takes no new source after its first build).
 6. Run `catalyst new KB --title "<title>" --field Serves=<rule IDs>
    --field Kind=<Project|Reflective> --field Classification=<level>
-   --field "Default classification=<level>" --field "Hosted embedding up to=<level|None>"
+   --field "Default classification=<level>" --field "Hosted embedding up to=<level|Local only>"
    --field Repository=<url or path> --field Freshness=<interval>
    --field Basis=<Criterion|Documents> --field "Document base=<Static|Dynamic>"
    --field Target=<Folders|Vector database>

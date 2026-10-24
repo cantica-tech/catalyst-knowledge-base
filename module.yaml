@@ -1,6 +1,6 @@
 id: knowledge-base
 name: Knowledge Base Module
-version: 0.5.0
+version: 0.5.1
 description: A process module with one purpose, building and maintaining knowledge bases — a project's, from any information outside catalyst, or a reflective one of the Cantica ecosystem — as a classified markdown repository with fresh pointers and versioned builds any model can read (organized markdown folders or vector databases); alone in a criterion or beside any other module.
 grounding_type: rule
 format: 3
@@ -52,8 +52,8 @@ entities:
       Hosted embedding up to:
         kind: enum
         required: true
-        values: [None, Public, Internal, Confidential, Restricted]
-        hint: "the highest classification a hosted embedding service may receive; anything above is embedded only by a local model (`None`: local only)"
+        values: [Local only, Public, Internal, Confidential, Restricted]
+        hint: "the highest classification a hosted embedding service may receive; anything above is embedded only by a local model (`Local only`: nothing goes to a hosted service)"
       Repository:
         kind: text
         required: true
