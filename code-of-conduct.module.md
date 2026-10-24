@@ -14,13 +14,14 @@
 | Knowledge build | `kb-builds/` | `KBUILD-` | its knowledge base (`Knowledge base`) |
 
 What each needs and when it closes: `Rules-of-Rules.md`, the module's part
-(KB-L1, `rr-KB-001` to `rr-KB-007`). How a knowledge base's repository, its
+(KB-L1, KB-L2, `rr-KB-001` to `rr-KB-009`). How a knowledge base's repository, its
 documents, its pointers and its builds are laid out: the module's `GUIDE.md`
 (`modules/knowledge-base/GUIDE.md` in the criterion).
 
 ## 4. Slash-command entry points
 
-- `/kb-setup project|reflective <title>` — establish a knowledge base: its
+- `/kb-setup project|reflective <title>` — onboard a knowledge base: its basis
+  and sources, its location and storage, its target, its document base, then its
   `KB-` record, its repository, its policy and its curator.
 - `/create knowledge-source <title>` (`/create-knowledge-source`) — record a source a knowledge
   base draws from.
@@ -44,38 +45,60 @@ Only a `Knowledge Curator` or an `Admin` runs `/kb-setup`, `/kb-import`,
 `/kb-classify` and `/kb-build`; anyone may run `/kb-refresh` and `/kb-audit`
 (`rr-KB-006`).
 
-When the user enters `/kb-setup <kind> <title>`:
+When the user enters `/kb-setup <kind> <title>`, onboard it (`GUIDE.md`, "Onboarding"). Onboarding always
+happens, whether this module is alone or beside others; every choice is the user's, proposed, never assumed:
 
-1. Ask what it must make known and for whom, and its classification; if no
-   rule says it, propose one (`catalyst id next-rule`) and add it only with
-   the user's assent. A reflective knowledge base draws only on the Cantica
-   ecosystem (`rr-KB-005`): say so.
-2. Run `catalyst new KB --title "<title>" --field Serves=<rule IDs>
+1. **What it serves.** Ask what it must make known and for whom, and its
+   classification; if no rule says it, propose one (`catalyst id next-rule`)
+   and add it only with the user's assent. A reflective knowledge base draws
+   only on the Cantica ecosystem (`rr-KB-005`): say so.
+2. **Its basis and sources.** Propose `Criterion` when another module governs
+   this deployment (`catalyst module list`), else `Documents`:
+   - *Criterion*: the project's criterion is its first source, read through
+     catalyst's CLI (`list`, `view`, `graph`), whichever modules wrote it; ask
+     which other sources enrich it.
+   - *Documents*: gather its sources with the user: what they are, where they
+     live, how they are reached, and their classification.
+3. **Its location and storage strategy**: where its repository lives, and how
+   its documents are organized in folders (`GUIDE.md`, "The repository"); the
+   folder plan goes into its Structure.
+4. **Its target**: `Folders` (organized markdown documents) or
+   `Vector database` (chunks and vectors); both are readable by any model
+   (`rr-KB-009`).
+5. **Its document base**: `Dynamic` (grows and shrinks; the default for a
+   criterion-based knowledge base, a criterion always being in flux) or
+   `Static` (defined once; it takes no new source after its first build).
+6. Run `catalyst new KB --title "<title>" --field Serves=<rule IDs>
    --field Kind=<Project|Reflective> --field Classification=<level>
    --field "Default classification=<level>" --field "Hosted embedding up to=<level|None>"
    --field Repository=<url or path> --field Freshness=<interval>
+   --field Basis=<Criterion|Documents> --field "Document base=<Static|Dynamic>"
+   --field Target=<Folders|Vector database>
    [--field Curator=<user>] --command /kb-setup --tier kb --as <signer>`.
    Propose `Default classification` no lower than `Classification`, and
    `Hosted embedding up to` no higher than `Internal`, unless the user decides
-   otherwise.
-3. If the deployment has no `Knowledge Curator` role, offer to add it:
-   `catalyst role add "Knowledge Curator" --action /kb-setup --action /kb-import
-   --action /kb-classify --action /kb-build --action /kb-refresh --action /kb-audit
-   --action /create --action /status --action /journal`, then
-   `catalyst user assign-role <user> "Knowledge Curator"` — each only with the
-   user's assent.
-4. Create the repository as `GUIDE.md` lays it out (`KB.md`, `docs/`,
+   otherwise. Then record each source of step 2 (`/create knowledge-source`),
+   the criterion first for a criterion-based one (`Location` `criterion:<the
+   project's name>`).
+7. **Its curator.** People and roles are catalyst-users' (kernel 0.106.0): if
+   its provider has no Knowledge Curator role, offer its admin to add one
+   (`catalyst-users roles provision <a roles document naming Knowledge Curator
+   and the commands /kb-setup, /kb-import, /kb-classify, /kb-build,
+   /kb-refresh, /kb-audit, /create, /status, /journal>`) and to put the
+   curator in it — each only with the user's assent; `catalyst identity
+   whoami` shows the result.
+8. Create the repository as `GUIDE.md` lays it out (`KB.md`, `docs/`,
    `pointers/`, `builds/`), with `KB.md` naming the `KB-` ID, its
-   classification and its policy. A new repository is the user's to create or
-   push: ask before any push (L3).
-5. Write the Scope and Structure, then set it `Established`. Its Policy and
+   classification, its policy, its basis, document base and target. A new
+   repository is the user's to create or push: ask before any push (L3).
+9. Write the Scope and Structure, then set it `Established`. Its Policy and
    Maintenance are written next, and, with its curator named, it becomes
    `Active` (`rr-KB-001`).
-6. Offer the governance `GUIDE.md` gives ("Governance"), each only with the
-   user's assent (`rr-KB-007`): a `WORKFLOW-` governing `KBUILD` (and one
-   governing `KB`), from its Transitions table, made `Active`; and the gate
-   that asks two curators to publish a build classified `Confidential` or
-   above, added to `IAM/gates.json`, journaled.
+10. Offer the governance `GUIDE.md` gives ("Governance"), each only with the
+    user's assent (`rr-KB-007`): a `WORKFLOW-` governing `KBUILD` (and one
+    governing `KB`), from its Transitions table, made `Active`; and the gate
+    that asks two curators to publish a build classified `Confidential` or
+    above, added to `IAM/gates.json`, journaled.
 
 When the user enters `/create knowledge-source <title>` or `/create-knowledge-source <title>`, run
 `catalyst new KSOURCE --title "<t>" --field "Knowledge base=<KB-id>"
@@ -83,7 +106,8 @@ When the user enters `/create knowledge-source <title>` or `/create-knowledge-so
 [--field Access=<how>] --command /create-knowledge-source --tier kb --as <signer>`
 (it cites the source back in the knowledge base's `Sources`), then write its
 Description and Import. Refuse a source outside the Cantica ecosystem for a
-reflective knowledge base.
+reflective knowledge base, and a new source for a `Static` document base once
+its first build exists (a static base is defined once).
 
 When the user enters `/kb-import <KSOURCE-id>`, read the source and its
 knowledge base (`catalyst view <id> --json`). For each document taken in,
@@ -118,20 +142,25 @@ When the user enters `/kb-build <KB-id> [<ceiling>]`:
    unmarked document or pointer.
 2. Take every document and pointer whose effective classification is at or
    below the ceiling (default: the knowledge base's `Classification`); list
-   what the ceiling leaves out.
-3. Embed each with the backend its effective classification allows:
-   a hosted service only up to `Hosted embedding up to`, a local model above
-   it. Never send a document to a backend above its allowance; if no allowed
-   backend is available, stop and say so.
-4. Write the build as `GUIDE.md` lays it out (`manifest.json`,
-   `chunks.jsonl`, `vectors.parquet`) with its version, its classification
-   (the highest effective classification it contains) and the repository's
-   commit.
+   what the ceiling leaves out. A criterion-based knowledge base first reads
+   the criterion's current records into its documents; a `Dynamic` one
+   processes only what changed since its last build.
+3. For a `Vector database` target, embed each with the backend its effective
+   classification allows: a hosted service only up to `Hosted embedding up
+   to`, a local model above it. Never send a document to a backend above its
+   allowance; if no allowed backend is available, stop and say so. A
+   `Folders` target embeds nothing.
+4. Write the build as `GUIDE.md` lays it out for its target ("A build"), with
+   its manifest (format version, version, classification — the highest
+   effective classification it contains — and the repository's commit) and
+   its `README.md`: readable by any model, without catalyst (`rr-KB-009`).
 5. Record it: `catalyst new KBUILD --title "<KB title> <version>"
    --field "Knowledge base=<KB-id>" --field Version=<version>
+   --field Target=<Folders|Vector database>
    --field Ceiling=<level> --field Classification=<level>
-   --field "Embedding model=<model, where it ran>" --field "Content commit=<sha>"
-   --field Location=<where> --command /kb-build --tier build --as <signer>`,
+   [--field "Embedding model=<model, where it ran>"] --field "Content commit=<sha>"
+   --field Location=<where> --command /kb-build --tier build --as <signer>`
+   (`Embedding model` required of a vector database build),
    set it `Built`, and write its Contents.
 6. Publishing is a separate step: write its Verification, then set it
    `Published`, and the build it replaces `Superseded`. Publishing anywhere

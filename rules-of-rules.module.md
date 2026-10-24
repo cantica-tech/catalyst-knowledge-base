@@ -89,3 +89,14 @@ drawn from the project's own repositories and records. KBM never requires,
 names or assumes another module, its entity types, folders, commands or
 tiers: what it writes and checks holds whichever modules sit beside it
 (KB-L2; the kernel's INV-30, modules compose).
+
+## 9. `rr-KB-009` A build is readable by any model, without catalyst
+
+A build, organized markdown folders or a vector database, needs neither
+catalyst, nor an account, nor a network to be read, and no particular model or
+vendor: open formats only (UTF-8 markdown with YAML front matter, JSON, JSON
+Lines, Apache Parquet); a versioned `manifest.json` and a `README.md` that say
+what it is and how to load it; each document and chunk carrying its effective
+classification (KB-L1); and, for vectors, the chunks' text and documents
+beside them, so a consumer may re-embed with its own model. A vector store
+built from them is a convenience, never the only copy (`GUIDE.md`, "A build").

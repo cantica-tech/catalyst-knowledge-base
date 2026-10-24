@@ -1,13 +1,13 @@
 id: knowledge-base
 name: Knowledge Base Module
-version: 0.4.1
-description: A process module with one purpose, building and maintaining knowledge bases — a project's, from any information outside catalyst, or a reflective one of the Cantica ecosystem — as a classified markdown repository with fresh pointers and versioned vector databases; alone in a criterion or beside any other module.
+version: 0.5.0
+description: A process module with one purpose, building and maintaining knowledge bases — a project's, from any information outside catalyst, or a reflective one of the Cantica ecosystem — as a classified markdown repository with fresh pointers and versioned builds any model can read (organized markdown folders or vector databases); alone in a criterion or beside any other module.
 grounding_type: rule
 format: 3
 
 # The module's own meta-rules and invariants: rr-KB-NNN and INV-KB-n.
 namespace: KB
-kernel_version: ">=0.104.0"
+kernel_version: ">=0.107.0"
 
 # Ceremony tiers (rr-META-006): a chore needs no artifact; establishing or
 # changing a knowledge base is a KB; producing a vector database is a KBUILD.
@@ -65,6 +65,18 @@ entities:
       Curator:
         kind: user
         hint: "the registered user answerable for it (a `Knowledge Curator`)"
+      Basis:
+        kind: enum
+        values: [Criterion, Documents]
+        hint: "what onboarding built it on: `Criterion` (the project's criterion, enriched by its sources) / `Documents` (only the sources gathered for it)"
+      Document base:
+        kind: enum
+        values: [Static, Dynamic]
+        hint: "`Static` (defined once, takes no new source after its first build) / `Dynamic` (grows and shrinks at will; the default for a criterion-based knowledge base)"
+      Target:
+        kind: enum
+        values: [Folders, Vector database]
+        hint: "what its builds produce: `Folders` (organized markdown documents) / `Vector database` (chunks and vectors) — both readable by any model (`rr-KB-009`)"
       Sources:
         kind: ref-list
         to: KSOURCE
@@ -72,7 +84,7 @@ entities:
       Builds:
         kind: ref-list
         to: KBUILD
-        hint: "`KBUILD-NNNNNN` list of its vector databases — back-populated from each build's `Knowledge base`, never hand-edited"
+        hint: "`KBUILD-NNNNNN` list of its builds — back-populated from each build's `Knowledge base`, never hand-edited"
     states: [Proposed, Established, Active, Frozen, Retired]
     initial: Proposed
     closed: [Retired]
@@ -98,7 +110,7 @@ entities:
           (`Freshness`), when it is rebuilt, and what retires it.
       - Related: |
           Other `KB-` IDs it overlaps, feeds or replaces.
-    definition: "A `KB-NNNNNN` records one knowledge base: the rules it serves (`Serves`, required), whether it is a project's or reflective of the Cantica ecosystem, its classification (the floor of everything in it), its policy for new, imported and unmarked documents, the highest classification a hosted embedding service may receive, its repository, how often it is refreshed, and its curator. Its sources and builds cite it back. It is not `Active` without its Policy and Maintenance written. Lives in `knowledge-bases/`, registered in `knowledge-bases.md`."
+    definition: "A `KB-NNNNNN` records one knowledge base: the rules it serves (`Serves`, required), whether it is a project's or reflective of the Cantica ecosystem, its classification (the floor of everything in it), its policy for new, imported and unmarked documents, the highest classification a hosted embedding service may receive, its repository, how often it is refreshed, its curator, and what onboarding decided: its basis (the project's criterion, or documents alone), whether its document base is static or dynamic, and its target (folders or a vector database). Its sources and builds cite it back. It is not `Active` without its Policy and Maintenance written. Lives in `knowledge-bases/`, registered in `knowledge-bases.md`."
   KSOURCE:
     name: "Knowledge source"
     plural: "Knowledge sources"
@@ -157,7 +169,7 @@ entities:
         required: true
         to: KB
         backref: Builds
-        hint: "the `KB-NNNNNN` it is a vector database of; cited back in the knowledge base's `Builds`"
+        hint: "the `KB-NNNNNN` it is a build of; cited back in the knowledge base's `Builds`"
       Version:
         kind: text
         required: true
@@ -171,10 +183,13 @@ entities:
         kind: enum
         values: [Public, Internal, Confidential, Restricted]
         hint: "what it is classified, once built: the highest classification of what it contains (never above `Ceiling`)"
+      Target:
+        kind: enum
+        values: [Folders, Vector database]
+        hint: "what it produced: `Folders` / `Vector database`; its knowledge base's `Target` when left out"
       Embedding model:
         kind: text
-        required: true
-        hint: "the model and its version, and where it ran (`local` or the hosted service's name)"
+        hint: "for a `Vector database` build, required: the model and its version, and where it ran (`local` or the hosted service's name)"
       Content commit:
         kind: text
         hint: "the knowledge base repository's commit it was built from"
@@ -198,7 +213,7 @@ entities:
           classified above its ceiling. A build is not `Published` without it.
       - Related: |
           The `KBUILD-` it supersedes.
-    definition: "A `KBUILD-NNNNNN` records one versioned vector database of a knowledge base: its version, its ceiling (the highest classification it may contain), its own classification once built, the embedding model and where it ran, the repository commit it was built from, and where it is kept. It is not `Published` without its Verification; it is superseded or withdrawn, never deleted. Lives in `kb-builds/`, registered in `kb-builds.md`."
+    definition: "A `KBUILD-NNNNNN` records one versioned build of a knowledge base, organized markdown folders or a vector database, readable by any model: its target, its version, its ceiling (the highest classification it may contain), its own classification once built, the embedding model and where it ran, the repository commit it was built from, and where it is kept. It is not `Published` without its Verification; it is superseded or withdrawn, never deleted. Lives in `kb-builds/`, registered in `kb-builds.md`."
 
 commands:
   - name: kb-setup

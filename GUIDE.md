@@ -1,7 +1,7 @@
 # Knowledge bases: establishing and maintaining them
 
-How a knowledge base is established, laid out, kept fresh and built into vector databases. The rules behind each step
-are the module's meta-rules (`rr-KB-001` to `rr-KB-008`); the commands that carry them out are in
+How a knowledge base is established, laid out, kept fresh and built into what a model reads (organized folders or a vector database). The rules behind each step
+are the module's meta-rules (`rr-KB-001` to `rr-KB-009`); the commands that carry them out are in
 `CODE-OF-CONDUCT.md` §4.
 
 Why each step is what it is, with the research behind it: [`docs/best-practices.md`](docs/best-practices.md).
@@ -41,19 +41,38 @@ Four levels, lowest to highest: `Public` < `Internal` < `Confidential` < `Restri
 - **Embedding** goes to a hosted service only up to `Hosted embedding up to`; anything above is embedded by a local
   model and never leaves the machine.
 
+## Onboarding
+
+Every knowledge base is onboarded before its first build, whether KBM is alone or beside other modules
+(`/kb-setup`). Every choice is the curator's; the engine or an agent proposes.
+
+| Step | Criterion-based (KBM beside other modules) | Documents-based (KBM alone) |
+| --- | --- | --- |
+| 1. Basis and sources | the project's criterion is the first source, read through catalyst's CLI; select the sources that **enrich** it | **gather** the sources: what, where, how reached, how classified |
+| 2. Location and storage | where its repository lives, and how its documents are organized in folders | the same |
+| 3. Target | `Folders` (organized markdown documents) or `Vector database` (chunks and vectors) | the same |
+| 4. Document base | `Dynamic` by default (a criterion is always in flux), or `Static` | `Static` or `Dynamic` |
+
+- **Static**: defined once, never changed; it takes no new source after its first build, and a build is a function
+  of it alone.
+- **Dynamic**: grows and shrinks at will; each build re-reads its sources and processes only what changed.
+
+The `KB-` record keeps what onboarding decided: `Basis`, `Document base` and `Target`.
+
 ## Establishing a knowledge base
 
-1. **Decide** what it must make known, for whom, its kind and its classification. Name the rule it serves; propose
-   one if none says it.
-2. **Record it:** `/kb-setup project|reflective <title>` creates the `KB-` (`Proposed`), with its policy fields.
-3. **Name a curator:** a `Knowledge Curator` (the role `/kb-setup` offers to add), or an `Admin`.
+1. **Onboard it** (above): what it must make known, for whom, its kind and classification, the rule it serves (propose
+   one if none says it), its basis and sources, its location and storage, its target and its document base.
+2. **Record it:** `/kb-setup project|reflective <title>` creates the `KB-` (`Proposed`), with its policy and
+   onboarding fields, and one `KSOURCE-` per source (the criterion first, for a criterion-based one).
+3. **Name a curator:** a person holding the Knowledge Curator role in catalyst-users (which `/kb-setup` offers to
+   provision), or an `Admin`.
 4. **Create the repository** (below), with `KB.md` naming the `KB-` ID. Write the Scope and the Structure: the
    knowledge base is `Established`.
-5. **Record its sources:** one `KSOURCE-` for each place it draws on, with how its documents come in (Import) and
-   the mark they get.
+5. **Write each source's Import:** how its documents come in, and the mark they get.
 6. **Write the Policy and the Maintenance:** it is `Active`.
 7. **Import:** `/kb-import <KSOURCE-id>` for each source. Every document and pointer is marked as it is written.
-8. **Audit, then build:** `/kb-audit` finds nothing unmarked; `/kb-build <KB-id>` makes the first vector database.
+8. **Audit, then build:** `/kb-audit` finds nothing unmarked; `/kb-build <KB-id>` makes the first build of its target.
 
 ## Maintaining it
 
@@ -161,27 +180,50 @@ whether the target changed. A pointer is never deleted silently.
 
 ## A build
 
-A build is a versioned vector database in portable files, loadable by any vector store (FAISS, LanceDB, pgvector,
-Chroma) and by any model:
+A build is what a model reads: **organized markdown folders** or a **vector database**, as the knowledge base's
+`Target` says. Either is readable by any model, without catalyst, an account or a network (`rr-KB-009`): open formats
+only, a manifest and a README that say what it is and how to load it, and every document and chunk carrying its
+effective classification.
+
+### Folders
 
 ```
 <version>/
 ├── manifest.json
+├── README.md          what it is, its classification, how to read it
+├── index.md           every document: its path, title and one-line summary, linked relatively
+└── docs/              the documents at or below the ceiling, organized as the knowledge base's folders
+    └── <topic>/<document>.md
+```
+
+Each document keeps its front matter (`title`, `classification`, `source`, `updated`), with `hash` (its content's
+SHA-256) added; pointers become documents holding their summary and `url`.
+
+### Vector database
+
+```
+<version>/
+├── manifest.json
+├── README.md          what it is, its embedding model, how to load it (any vector store, any language)
 ├── chunks.jsonl
-└── vectors.parquet
+├── vectors.parquet
+└── docs/              the documents the chunks came from, as for Folders
 ```
 
 - **`manifest.json`**: what it is.
 
   ```json
   {
+    "format": "kbm-build/1",
+    "target": "vector-database",
     "knowledge_base": "KB-000001-Ab3xR9pQ",
     "build": "KBUILD-000004-Ab3xR9pQ",
     "version": "1.2.0",
     "classification": "Internal",
     "ceiling": "Internal",
     "content_commit": "0123456789abcdef0123456789abcdef01234567",
-    "embedding": {"model": "nomic-embed-text-v1.5", "dimensions": 768, "where": "local"},
+    "embedding": {"model": "nomic-embed-text-v1.5", "dimensions": 768, "where": "local",
+                  "normalized": true, "distance": "cosine"},
     "chunking": {"max_tokens": 512, "overlap": 64, "by": "heading"},
     "counts": {"documents": 412, "pointers": 57, "chunks": 3120, "left_out": 9},
     "files": {"chunks.jsonl": "sha256:…", "vectors.parquet": "sha256:…"},
@@ -189,14 +231,24 @@ Chroma) and by any model:
   }
   ```
 
+  A folders build's manifest has `"target": "folders"`, no `embedding` or `chunking`, and lists `index.md` and the
+  documents under `files`.
+
 - **`chunks.jsonl`**: one line per chunk: `{"id", "path", "title", "heading", "text", "classification", "source",
   "url"}`, `url` for a pointer's chunk.
 - **`vectors.parquet`**: one row per chunk: `id` and `vector` (a fixed-size list of floats, the manifest's
-  `dimensions`), in `chunks.jsonl`'s order.
+  `dimensions`), in `chunks.jsonl`'s order. A consumer queries with the same embedding model, or re-embeds the chunks
+  (or the documents) with its own. A vector store (FAISS, LanceDB, pgvector, Chroma) loads them directly; one built
+  from them is a convenience, never the only copy.
+
+### Where builds are kept
 
 The repository keeps only `builds/<version>/manifest.json`; the build's files are kept where its `KBUILD-` says
 (`Location`): a release asset, a bucket, a path. A build's classification travels with it: it is stored and shared
 only where that classification allows.
 
-A version is `MAJOR.MINOR.PATCH`: a new major when the embedding model or the chunking changes (the vectors are not
-comparable), a new minor when content is added or removed, a patch for corrections.
+## The engine
+
+`catalyst-kb-engine` (its own repository, built on Pydantic AI) carries onboarding and builds out as workflows: it
+proposes, a person decides, and its state is this criterion's `KB-`, `KSOURCE-`, `KBUILD-` and `WORKFLOW-` records,
+journaled. Until it is released, the commands above are carried out by the agent following them.
