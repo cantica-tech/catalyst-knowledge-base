@@ -1,10 +1,22 @@
 # Knowledge bases: establishing and maintaining them
 
 How a knowledge base is established, laid out, kept fresh and built into vector databases. The rules behind each step
-are the module's meta-rules (`rr-KB-001` to `rr-KB-007`); the commands that carry them out are in
+are the module's meta-rules (`rr-KB-001` to `rr-KB-008`); the commands that carry them out are in
 `CODE-OF-CONDUCT.md` §4.
 
 Why each step is what it is, with the research behind it: [`docs/best-practices.md`](docs/best-practices.md).
+
+## Alone or beside any module
+
+The knowledge base module (KBM) works in two setups (KB-L2, `rr-KB-008`):
+
+- **Alone**: a criterion whose only module is KBM, made for its knowledge bases (`catalyst init --module
+  knowledge-base`).
+- **Beside another module**: added to the criterion of an existing project, beside the module that already governs it
+  (`catalyst module install <KBM release>`), so its knowledge bases are built off that project. Either can be
+  installed first.
+
+Nothing below depends on which: KBM names no other module, and its commands and checks hold in both.
 
 ## Two kinds
 

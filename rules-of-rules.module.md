@@ -79,3 +79,13 @@ classification it is allowed at. A build classified `Confidential` or above
 is published only with two curators' approvals (a gate), neither of them its
 author. A source is due for its next check at its `Next check`; one past it
 is overdue, and waits in the inbox for the role the workflow escalates to.
+
+## 8. `rr-KB-008` Alone or beside any module
+
+The knowledge base module (KBM) is a criterion's only module, or is installed
+beside the module that already governs a project (`catalyst module install`),
+in either order; a knowledge base is then built off that project, its sources
+drawn from the project's own repositories and records. KBM never requires,
+names or assumes another module, its entity types, folders, commands or
+tiers: what it writes and checks holds whichever modules sit beside it
+(KB-L2; the kernel's INV-31).
