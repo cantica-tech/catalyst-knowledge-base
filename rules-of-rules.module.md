@@ -88,4 +88,4 @@ in either order; a knowledge base is then built off that project, its sources
 drawn from the project's own repositories and records. KBM never requires,
 names or assumes another module, its entity types, folders, commands or
 tiers: what it writes and checks holds whichever modules sit beside it
-(KB-L2; the kernel's INV-31).
+(KB-L2; the kernel's INV-30, modules compose).
