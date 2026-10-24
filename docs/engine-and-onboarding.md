@@ -1,6 +1,8 @@
 # The KBM engine and onboarding: design and technology research
 
-Status: **research and proposal** (2026-10-24), nothing built yet. It records the owner's design for the knowledge base
+Status: **research and proposal** (2026-10-24). Decided the same day: the engine is its own repository,
+`catalyst-kb-engine` (Apache-2.0, governed by catalyst), on Pydantic AI; the KB record gains `Basis`,
+`Document base` and `Target`; a build is readable by any model without catalyst (KBM 0.5.0, `rr-KB-009`). It records the owner's design for the knowledge base
 module's (KBM) engine and onboarding, what catalyst requires of it, and the open-source Python technologies that could
 run it, checked online on 2026-10-24.
 
@@ -121,7 +123,7 @@ state.**
 ```text
 KBM commands (/kb-setup, /kb-import, /kb-build, …)        module: prose, types, workflow
         │ call
-catalyst-kb-engine (new package, MIT)                      code, its own repository and releases
+catalyst-kb-engine (new package, Apache-2.0)                      code, its own repository and releases
   ├─ onboarding graph (pydantic-graph)
   │    select sources → layout and storage → target → static|dynamic   (each a person's approval)
   ├─ build graph (pydantic-graph)
