@@ -33,6 +33,10 @@ Four levels, lowest to highest: `Public` < `Internal` < `Confidential` < `Restri
 - **A document's or a pointer's own mark** is its `classification` in its front matter.
 - **Its effective classification** is the higher of the two. A public document in an internal knowledge base is
   internal; a restricted document in a public knowledge base stays restricted.
+- **A private source is a floor.** Every document read from a source whose `Visibility` is `Private` is at least
+  `Internal`, whatever its own mark. A source's visibility changes when its host's does: each build re-reads it, and
+  refuses to run when the `KSOURCE-` record and the host (such as GitHub) disagree. A source made private leaves the
+  next `Public` build; a source made public joins it.
 - **The policy** (`Default classification`) marks every document or pointer that is new, imported or unmarked, when
   it is written, unless its source gives a mark (`KSOURCE` `Classification`). Nothing stays unmarked: `/kb-build`
   refuses while anything is.
@@ -58,6 +62,20 @@ Every knowledge base is onboarded before its first build, whether KBM is alone o
 - **Dynamic**: grows and shrinks at will; each build re-reads its sources and processes only what changed.
 
 The `KB-` record keeps what onboarding decided: `Basis`, `Document base` and `Target`.
+
+Each source is a `KSOURCE-` with its `Kind` and its `Visibility`:
+
+| Kind | What it is | `Location` |
+| --- | --- | --- |
+| `Repository` | a git repository of documents | its URL, or a path |
+| `Folder` | a directory or a drive folder | its path or URL |
+| `Site` | a website or a wiki space | its URL |
+| `Criterion` | a catalyst project's criterion: this project's, or another's | `criterion:<project name>` |
+
+A `Criterion` source is read only through catalyst's CLI (`catalyst list`, `view --json`), never by reading its files
+and never by knowing which modules wrote it. Each entity becomes a document citing its ID, its criterion and its
+status, with its own history from the journal. A criterion is private unless its repository is public, so its
+documents are at least `Internal`.
 
 ## Establishing a knowledge base
 

@@ -78,8 +78,10 @@ happens, whether this module is alone or beside others; every choice is the user
    Propose `Default classification` no lower than `Classification`, and
    `Hosted embedding up to` no higher than `Internal`, unless the user decides
    otherwise. Then record each source of step 2 (`/create knowledge-source`),
-   the criterion first for a criterion-based one (`Location` `criterion:<the
-   project's name>`).
+   each with its `Kind` and `Visibility`, the criterion first for a
+   criterion-based one (`Location` `criterion:<the project's name>`,
+   `Kind` `Criterion`, `Visibility` `Private` unless its repository is
+   public).
 7. **Its curator.** People and roles are catalyst-users' (kernel 0.106.0): if
    its provider has no Knowledge Curator role, offer its admin to add one
    (`catalyst-users roles provision <a roles document naming Knowledge Curator
@@ -102,10 +104,16 @@ happens, whether this module is alone or beside others; every choice is the user
 
 When the user enters `/create knowledge-source <title>` or `/create-knowledge-source <title>`, run
 `catalyst new KSOURCE --title "<t>" --field "Knowledge base=<KB-id>"
---field Location=<url or path> [--field Classification=<level|Unmarked>]
+--field Location=<url or path> [--field Kind=<Repository|Folder|Site|Criterion>]
+[--field Visibility=<Public|Private>] [--field Classification=<level|Unmarked>]
 [--field Access=<how>] --command /create-knowledge-source --tier kb --as <signer>`
 (it cites the source back in the knowledge base's `Sources`), then write its
-Description and Import. Refuse a source outside the Cantica ecosystem for a
+Description and Import. Ask the source's `Kind` and `Visibility` rather than
+assume them, and check the visibility against the host where it can be read
+(`gh repo view <repo> --json visibility` for a GitHub repository): a
+`Criterion` source's `Location` is `criterion:<project name>`, and its
+visibility is its criterion repository's (`catalyst.toml`
+`catalyst_repo_url`). Refuse a source outside the Cantica ecosystem for a
 reflective knowledge base, and a new source for a `Static` document base once
 its first build exists (a static base is defined once).
 
@@ -115,7 +123,12 @@ as its Import section says — copied as markdown, summarised, or kept as a
 pointer — write it under `docs/` or `pointers/` in the knowledge base's
 repository with its front matter (`GUIDE.md`, "A document" and "A pointer"):
 `classification` the source's mark, else the knowledge base's
-`Default classification`; `source` the `KSOURCE-` ID; `imported` today. Never
+`Default classification`, raised to `Internal` when the source is `Private`
+(its floor, `rr-KB-002`); `source` the `KSOURCE-` ID; `imported` today.
+A `Criterion` source is read only through catalyst's CLI (`catalyst list all
+--json`, `catalyst view <ID> --json`), one document per entity citing its ID,
+criterion and status. Refuse to import when the source's `Visibility` and its
+host disagree, and say which. Never
 copy a document the source's access does not allow, and never write a secret.
 Then report what was added, by directory and by classification.
 

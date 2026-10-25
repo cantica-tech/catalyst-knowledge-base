@@ -1,6 +1,6 @@
 id: knowledge-base
 name: Knowledge Base Module
-version: 0.5.1
+version: 0.6.0
 description: A process module with one purpose, building and maintaining knowledge bases — a project's, from any information outside catalyst, or a reflective one of the Cantica ecosystem — as a classified markdown repository with fresh pointers and versioned builds any model can read (organized markdown folders or vector databases); alone in a criterion or beside any other module.
 grounding_type: rule
 format: 3
@@ -129,6 +129,14 @@ entities:
         kind: text
         required: true
         hint: "where it is: a repository, a site, a drive folder, a wiki space (a URL or a path)"
+      Kind:
+        kind: enum
+        values: [Repository, Folder, Site, Criterion]
+        hint: "what it is: `Repository` (a git repository) / `Folder` (a directory or drive folder) / `Site` (a website or wiki space) / `Criterion` (another catalyst project's criterion, `Location` `criterion:<project name>`, read only through catalyst's CLI)"
+      Visibility:
+        kind: enum
+        values: [Public, Private]
+        hint: "`Public` / `Private`, as its host shows it: every document read from a `Private` source is at least `Internal` (a floor); a build refuses to run when this and the host disagree"
       Classification:
         kind: enum
         values: [Unmarked, Public, Internal, Confidential, Restricted]
@@ -155,7 +163,7 @@ entities:
           summarised, or kept as pointers; which directories they go to.
       - Related: |
           Other `KSOURCE-` IDs it mirrors or replaces.
-    definition: "A `KSOURCE-NNNNNN` records one source a knowledge base draws from: where it is, how it is read, the classification its documents get on import (or the knowledge base's default), and when it was last checked. It is `Stale` when not checked within the knowledge base's `Freshness`, `Broken` when it cannot be read, and retired in place, never deleted. Lives in `kb-sources/`, registered in `kb-sources.md`."
+    definition: "A `KSOURCE-NNNNNN` records one source a knowledge base draws from: where it is, what kind of source it is (a repository, a folder, a site, or another catalyst project's criterion), whether it is public or private (a private source's documents are at least `Internal`), how it is read, the classification its documents get on import (or the knowledge base's default), and when it was last checked. It is `Stale` when not checked within the knowledge base's `Freshness`, `Broken` when it cannot be read, and retired in place, never deleted. Lives in `kb-sources/`, registered in `kb-sources.md`."
   KBUILD:
     name: "Knowledge build"
     plural: "Knowledge builds"

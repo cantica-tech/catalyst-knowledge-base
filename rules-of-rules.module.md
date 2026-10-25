@@ -39,6 +39,8 @@ classification`, when it is written — nothing stays unmarked. Its
 **effective classification** is the higher of its own mark and its knowledge
 base's `Classification`: a public document in an internal knowledge base is
 internal; a restricted document in a public knowledge base stays restricted.
+A document read from a `Private` source (`KSOURCE` `Visibility`) is at least
+`Internal`, whatever its own mark: the source's floor.
 A mark is lowered only by a person's decision, journaled with why.
 
 ## 3. `rr-KB-003` Pointers are kept fresh, never silently dropped
