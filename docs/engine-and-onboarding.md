@@ -144,8 +144,8 @@ catalyst-kb-engine (new package, Apache-2.0)                      code, its own 
    Modules carry no code today.
 2. **Static or dynamic as a field**: a new `KB-` field (`Document base: Static | Dynamic`), which needs a KBM entity
    definition version and a migration.
-3. **Which models by default**: a local embedding model for everything (simplest, always within KB-L1), or hosted up
-   to the allowance.
+3. **Which models by default**: decided by the owner (2026-10-25): a local embedding model, `nomic-embed-text`;
+   a hosted one only when configured, up to the allowance (catalyst-kb-engine's design `01` §10.3).
 4. **Pydantic AI with catalyst's records as the durable state** (recommended), or LangGraph with its own checkpoints.
 
 ## Sources
