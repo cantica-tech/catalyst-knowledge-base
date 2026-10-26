@@ -241,8 +241,10 @@ SHA-256) added; pointers become documents holding their summary and `url`.
     "ceiling": "Internal",
     "content_commit": "0123456789abcdef0123456789abcdef01234567",
     "embedding": {"model": "nomic-embed-text-v1.5", "dimensions": 768, "where": "local",
-                  "normalized": true, "distance": "cosine"},
+                  "normalized": true, "distance": "cosine", "input": "context",
+                  "document_prefix": "search_document: ", "query_prefix": "search_query: "},
     "chunking": {"max_tokens": 512, "overlap": 64, "by": "heading"},
+    "incremental": {"previous": "1.1.0", "reused": 3080, "embedded": 40},
     "counts": {"documents": 412, "pointers": 57, "chunks": 3120, "left_out": 9},
     "files": {"chunks.jsonl": "sha256:…", "vectors.parquet": "sha256:…"},
     "built": "2026-10-22T10:00:00Z"
@@ -251,6 +253,12 @@ SHA-256) added; pointers become documents holding their summary and `url`.
 
   A folders build's manifest has `"target": "folders"`, no `embedding` or `chunking`, and lists `index.md` and the
   documents under `files`.
+
+  `embedding.input` says what each chunk was embedded as: `text`, its text alone, or `context`, its `title`, a newline,
+  its `heading` (when it has one), a blank line and its `text`. `document_prefix` came before that, and a question is
+  embedded with `query_prefix` before it, as some models expect. A manifest without them means `text` and no
+  prefixes. `incremental`, when present, names the previous build whose vectors were reused for unchanged chunks, and
+  counts the reused and the newly embedded ones.
 
 - **`chunks.jsonl`**: one line per chunk: `{"id", "path", "title", "heading", "text", "classification", "source",
   "url"}`, `url` for a pointer's chunk.
