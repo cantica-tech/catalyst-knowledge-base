@@ -138,15 +138,15 @@ catalyst-kb-engine (new package, Apache-2.0)                      code, its own 
 - **Dynamic**: every build re-reads the sources and processes only what changed (content hashes); **static**: the
   document base is frozen after onboarding and a build is a pure function of it.
 
-## 6. Open questions for the owner
+## 6. Decided (formerly the open questions for the owner)
 
-1. **Where the engine lives**: a new repository (`catalyst-kb-engine`, proposed), as catalyst-users is for people?
-   Modules carry no code today.
-2. **Static or dynamic as a field**: a new `KB-` field (`Document base: Static | Dynamic`), which needs a KBM entity
-   definition version and a migration.
-3. **Which models by default**: decided by the owner (2026-10-25): a local embedding model, `nomic-embed-text`;
-   a hosted one only when configured, up to the allowance (catalyst-kb-engine's design `01` §10.3).
-4. **Pydantic AI with catalyst's records as the durable state** (recommended), or LangGraph with its own checkpoints.
+1. **Where the engine lives**: its own repository, `cantica-tech/catalyst-kb-engine` (Apache-2.0, governed by
+   catalyst), as catalyst-users is for people; modules still carry no code.
+2. **Static or dynamic as a field**: yes, the KB record's `Document base: Static | Dynamic` field, since KBM 0.5.0
+   (with `Basis` and `Target`).
+3. **Which models by default**: a local embedding model, `nomic-embed-text` (the owner, 2026-10-25); a hosted one
+   only when configured, up to the allowance (catalyst-kb-engine's design `01` §10.3).
+4. **Which framework**: Pydantic AI, with catalyst's records (the criterion) as the durable state.
 
 ## Sources
 

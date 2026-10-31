@@ -140,7 +140,7 @@ part; none is added without the owner's assent.
 A knowledge base is its own repository, a catalyst project like any other (with its `catalyst.toml`, governed by
 this module), so every document added, changed or reclassified is journaled.
 
-```
+```text
 <knowledge base>/
 ├── catalyst.toml
 ├── KB.md                 the KB- ID, its title, classification, default classification, and a contents tree
@@ -205,7 +205,7 @@ effective classification.
 
 ### Folders
 
-```
+```text
 <version>/
 ├── manifest.json
 ├── README.md          what it is, its classification, how to read it
@@ -219,7 +219,7 @@ SHA-256) added; pointers become documents holding their summary and `url`.
 
 ### Vector database
 
-```
+```text
 <version>/
 ├── manifest.json
 ├── README.md          what it is, its embedding model, how to load it (any vector store, any language)
@@ -277,4 +277,5 @@ only where that classification allows.
 
 `catalyst-kb-engine` (its own repository, built on Pydantic AI) carries onboarding and builds out as workflows: it
 proposes, a person decides, and its state is this criterion's `KB-`, `KSOURCE-`, `KBUILD-` and `WORKFLOW-` records,
-journaled. Until it is released, the commands above are carried out by the agent following them.
+journaled. It is released (`gh release list -R cantica-tech/catalyst-kb-engine` shows the latest tag); where
+it is not installed, the commands above are carried out by the agent following them.
