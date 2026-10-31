@@ -6,7 +6,7 @@ name: Install
 on:
   pull_request:
   push:
-    branches: [main]
+    branches: [development]
 
 permissions:
   contents: read
