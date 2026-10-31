@@ -1,0 +1,51 @@
+# The module installs on the latest released kernel: a scratch project is given a deployment of the released
+# `catalyst.pyz` and kernel (cantica-tech/cantica-tech, catalyst/kernel/v<latest>/) with this checkout as its only
+# module, and `catalyst check` must pass on it.
+name: Install
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  install:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
+        with:
+          persist-credentials: false
+      - name: Fetch the latest released kernel
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          version=$(gh api repos/cantica-tech/cantica-tech/contents/catalyst/kernel --jq '.[].name' \
+            | sed -n 's/^v//p' | sort -V | tail -1)
+          [ -n "$version" ] || { echo "no released kernel found"; exit 1; }
+          echo "kernel $version"
+          base="https://raw.githubusercontent.com/cantica-tech/cantica-tech/main/catalyst/kernel/v$version"
+          mkdir -p "$RUNNER_TEMP/kernel"
+          curl -fsSL -o "$RUNNER_TEMP/catalyst.pyz" "$base/catalyst.pyz"
+          curl -fsSL -o "$RUNNER_TEMP/kernel.zip" "$base/kernel-v$version.zip"
+          unzip -q "$RUNNER_TEMP/kernel.zip" -d "$RUNNER_TEMP/kernel"
+      - name: Install a scratch deployment and check it
+        env:
+          # a scratch deployment signs through catalyst-users' static backend, which verifies nobody: tests only
+          CATALYST_ALLOW_STATIC_IDENTITY: "1"
+        run: |
+          set -euo pipefail
+          git config --global user.name "catalyst-ci"
+          git config --global user.email "catalyst-ci@localhost"
+          proj="$RUNNER_TEMP/project"
+          mkdir -p "$proj"
+          git -C "$proj" init -q
+          git -C "$proj" commit -q --allow-empty -m "scratch project"
+          cd "$proj"
+          python3 "$RUNNER_TEMP/catalyst.pyz" init --kernel "$RUNNER_TEMP/kernel" --name ci \
+            --module knowledge-base --module-dir "$GITHUB_WORKSPACE" --user CI --git-username catalyst-ci \
+            --agent claude-code --no-runtime
+          python3 "$RUNNER_TEMP/catalyst.pyz" check

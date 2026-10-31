@@ -47,8 +47,8 @@ A chunk is read out of context. Write so that each section stands on its own.
 ## 4. Chunk deliberately, and test it
 
 - **Start from a recursive baseline.** Split by structure (headings, then paragraphs), around 300–512 tokens, with
-  10–15% overlap [4][5]. In one 2026 comparison, recursive 512-token splitting beat semantic chunking by 15 points on
-  the same corpus [5]; other studies favour structure-aware chunks for contracts and technical documents [4][6].
+  10–15% overlap [4, 5]. In one 2026 comparison, recursive 512-token splitting beat semantic chunking by 15 points on
+  the same corpus [5]; other studies favour structure-aware chunks for contracts and technical documents [4, 6].
   The lesson is the same: measure on your own corpus (§9), don't assume.
 - **Respect the document's structure.** A chunk never spans two sections; a table or a list stays whole with its
   heading.
@@ -74,7 +74,7 @@ A chunk is read out of context. Write so that each section stands on its own.
 - **Pin the model and record it.** Vectors from two models live in incompatible spaces; similarity across them is
   meaningless. Record the model (name, version, dimensions) on every vector and in the build's manifest [8].
 - **Never mix two models in one index.** The failure is silent: a store accepts vectors of the right dimension from
-  any model, including a provider's quietly updated one [8][9].
+  any model, including a provider's quietly updated one [8, 9].
 - **Re-embed side by side.** Build the new index next to the old, validate recall on the evaluation set, then switch
   [8]. In this module: a new embedding model or chunking is a new **major** build version (`GUIDE.md`, "A build"), and
   the old build is `Superseded` only once the new one is `Published`.
@@ -98,7 +98,7 @@ OWASP's RAG security cheat sheet [2] is the most authoritative of the sources fo
   module: every document and pointer is marked, the effective classification is the higher of its own and its
   knowledge base's (KB-L1), and each chunk in `chunks.jsonl` carries it.
 - **Enforce at retrieval time, before similarity search;** filtering in the interface after retrieval is not secure
-  [2][13].
+  [2, 13].
 - **Separate what a single index cannot filter reliably:** distinct collections per classification or tenant [2]. In
   this module: one build per ceiling (`Ceiling`), never one build mixing levels a reader may not all see.
 - **Inherit the source's permissions,** and add document rules only for exceptions [13].
@@ -114,10 +114,10 @@ OWASP's RAG security cheat sheet [2] is the most authoritative of the sources fo
 ## 9. Evaluate before and after every build
 
 - **A golden set:** 50–100 questions with their verified answers and the passages that support them, written or
-  checked by people who know the domain [4][14].
+  checked by people who know the domain [4, 14].
 - **Measure retrieval and generation separately.** Retrieval: Recall@k (are the right passages in at all?),
-  Precision@k, MRR or nDCG (are they near the top?) [14][15]. Generation: faithfulness (grounded in what was
-  retrieved), answer relevancy, context precision and recall, as RAGAS defines them [4][14].
+  Precision@k, MRR or nDCG (are they near the top?) [14, 15]. Generation: faithfulness (grounded in what was
+  retrieved), answer relevancy, context precision and recall, as RAGAS defines them [4, 14].
 - **Calibrate model judges against people:** they prefer longer answers, are swayed by position and favour their own
   outputs [14].
 - **Faithful is not correct:** a stale document faithfully summarised gives an answer that is grounded and wrong [15].
@@ -239,31 +239,31 @@ rebuilt at each release (rr-KB-005), each build naming the kernel version it des
 
 ## Sources
 
-1. Anthropic, *Introducing Contextual Retrieval* (September 2024): https://www.anthropic.com/news/contextual-retrieval
-2. OWASP, *RAG Security Cheat Sheet*: https://cheatsheetseries.owasp.org/cheatsheets/RAG_Security_Cheat_Sheet.html
-3. Analytics Vidhya, *LLMs.txt Explained*: https://www.analyticsvidhya.com/blog/2025/03/llms-txt/ (see also ZenML,
-   https://www.zenml.io/blog/llms-txt)
+1. Anthropic, *Introducing Contextual Retrieval* (September 2024): <https://www.anthropic.com/news/contextual-retrieval>
+2. OWASP, *RAG Security Cheat Sheet*: <https://cheatsheetseries.owasp.org/cheatsheets/RAG_Security_Cheat_Sheet.html>
+3. Analytics Vidhya, *LLMs.txt Explained*: <https://www.analyticsvidhya.com/blog/2025/03/llms-txt/> (see also ZenML,
+   <https://www.zenml.io/blog/llms-txt>)
 4. Prem AI, *Building Production RAG: Architecture, Chunking, Evaluation & Monitoring (2026)*:
-   https://www.premai.io/blog/building-production-rag-architecture-chunking-evaluation-monitoring-2026-guide/
-5. Future AGI, *Evaluating RAG Chunking Strategies in 2026*: https://futureagi.com/blog/evaluating-rag-chunking-strategies-2026/
+   <https://www.premai.io/blog/building-production-rag-architecture-chunking-evaluation-monitoring-2026-guide/>
+5. Future AGI, *Evaluating RAG Chunking Strategies in 2026*: <https://futureagi.com/blog/evaluating-rag-chunking-strategies-2026/>
 6. *Evaluating Chunking Strategies for RAG in Oil and Gas Enterprise Documents* (arXiv 2603.24556):
-   https://arxiv.org/pdf/2603.24556; and Atlan, *Chunking Strategies for RAG*: https://atlan.com/know/chunking-strategies-rag/
+   <https://arxiv.org/pdf/2603.24556>; and Atlan, *Chunking Strategies for RAG*: <https://atlan.com/know/chunking-strategies-rag/>
 7. *RAG in Practice: Strategies & Production Best Practices* (DEV Community):
-   https://dev.to/ifnodoraemon/retrieval-augmented-generation-rag-in-practice-strategies-production-best-practices-2ccn
+   <https://dev.to/ifnodoraemon/retrieval-augmented-generation-rag-in-practice-strategies-production-best-practices-2ccn>
 8. *Embedding Models in Production: Selection, Versioning, and the Index Drift Problem*:
-   https://tianpan.co/blog/2026-04-09-embedding-models-production-versioning-index-drift
+   <https://tianpan.co/blog/2026-04-09-embedding-models-production-versioning-index-drift>
 9. *Embedding Model Churn: When Your Provider Silently Invalidates Your Entire Vector Index*:
-   https://tianpan.co/blog/2026-05-07-embedding-model-churn-vector-index-invalidation
+   <https://tianpan.co/blog/2026-05-07-embedding-model-churn-vector-index-invalidation>
 10. *Incremental Indexing and Freshness Strategies for Enterprise Search and RAG Corpora*:
-    https://www.geosurge.ai/corpus/gen-4165/indexed-search/incremental-indexing-and-freshness-strategies-for-enterprise-search-and-rag-corpora.html
+    <https://www.geosurge.ai/corpus/gen-4165/indexed-search/incremental-indexing-and-freshness-strategies-for-enterprise-search-and-rag-corpora.html>
 11. *RAG Knowledge Base Freshness: The Staleness Problem Teams Solve Last*:
-    https://tianpan.co/blog/2026-04-20-rag-knowledge-base-freshness-index-rot
+    <https://tianpan.co/blog/2026-04-20-rag-knowledge-base-freshness-index-rot>
 12. Oracle, *How to detect RAG index drift: deleted docs, stale chunks and duplicate embeddings*:
-    https://blogs.oracle.com/developers/how-to-detect-rag-index-drift-deleted-docs-stale-chunks-and-duplicate-embeddings
+    <https://blogs.oracle.com/developers/how-to-detect-rag-index-drift-deleted-docs-stale-chunks-and-duplicate-embeddings>
 13. Kiteworks, *RAG Pipeline Security Best Practices for 2026*:
-    https://www.kiteworks.com/cybersecurity-risk-management/rag-pipeline-security-best-practices/
-14. Anyscale, *RAG evaluation*: https://docs.anyscale.com/rag/evaluation; and Prem AI, *RAG Evaluation: Metrics,
-    Frameworks & Testing (2026)*: https://blog.premai.io/rag-evaluation-metrics-frameworks-testing-2026
-15. Future AGI, *How to Evaluate RAG Systems*: https://futureagi.substack.com/p/how-to-evaluate-rag-systems-the-complete
-16. *When to use Graphs in RAG* (ICLR 2026): https://www.iclr.cc/virtual/2026/poster/10007992; and Cognee, *GraphRAG vs
-    RAG*: https://www.cognee.ai/blog/deep-dives/graphrag-vs-rag
+    <https://www.kiteworks.com/cybersecurity-risk-management/rag-pipeline-security-best-practices/>
+14. Anyscale, *RAG evaluation*: <https://docs.anyscale.com/rag/evaluation>; and Prem AI, *RAG Evaluation: Metrics,
+    Frameworks & Testing (2026)*: <https://blog.premai.io/rag-evaluation-metrics-frameworks-testing-2026>
+15. Future AGI, *How to Evaluate RAG Systems*: <https://futureagi.substack.com/p/how-to-evaluate-rag-systems-the-complete>
+16. *When to use Graphs in RAG* (ICLR 2026): <https://www.iclr.cc/virtual/2026/poster/10007992>; and Cognee, *GraphRAG vs
+    RAG*: <https://www.cognee.ai/blog/deep-dives/graphrag-vs-rag>
