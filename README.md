@@ -33,3 +33,6 @@ beside the module that already governs a project, or with `catalyst init --modul
 only module. It needs kernel 0.107.0 or later: its guards hold field conditions, its sources fall due, its builds can
 be governed by a workflow and a conditional gate, and a module's own catalyst project file never ships. It is
 catalyst's second production module, the proof in catalyst's CI that the kernel names no module type.
+
+**Branches.** Work lands on `development` (the default branch), where CI runs on every push; `main` takes it by a
+pull request from `development`, and each release is tagged on `main`.
