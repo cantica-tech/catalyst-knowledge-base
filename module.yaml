@@ -24,6 +24,7 @@ entities:
   KB:
     name: "Knowledge base"
     plural: "Knowledge bases"
+    created_by: /kb-setup
     folder: knowledge-bases
     grounding: required
     grounding_field: Serves
@@ -167,6 +168,7 @@ entities:
   KBUILD:
     name: "Knowledge build"
     plural: "Knowledge builds"
+    created_by: /kb-build
     folder: kb-builds
     grounding: inherited
     grounding_field: Knowledge base
