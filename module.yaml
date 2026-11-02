@@ -7,7 +7,7 @@ format: 3
 
 # The module's own meta-rules and invariants: rr-KB-NNN and INV-KB-n.
 namespace: KB
-kernel_version: ">=0.122.0"
+kernel_version: ">=0.107.0"
 
 # Ceremony tiers (rr-META-006): a chore needs no artifact; establishing or
 # changing a knowledge base is a KB; producing a vector database is a KBUILD.
