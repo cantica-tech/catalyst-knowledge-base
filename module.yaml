@@ -1,6 +1,6 @@
 id: knowledge-base
 name: Knowledge Base Module
-version: 0.7.0
+version: 0.8.0
 description: A process module with one purpose, building and maintaining knowledge bases — a project's, from any information outside catalyst, or a reflective one of the Cantica ecosystem — as a classified markdown repository with fresh pointers and versioned builds any model can read (organized markdown folders or vector databases); alone in a criterion or beside any other module.
 grounding_type: rule
 format: 3
@@ -25,6 +25,7 @@ entities:
     name: "Knowledge base"
     plural: "Knowledge bases"
     created_by: /kb-setup
+    created_by_exclusive: true
     folder: knowledge-bases
     grounding: required
     grounding_field: Serves
@@ -169,6 +170,7 @@ entities:
     name: "Knowledge build"
     plural: "Knowledge builds"
     created_by: /kb-build
+    created_by_exclusive: true
     folder: kb-builds
     grounding: inherited
     grounding_field: Knowledge base

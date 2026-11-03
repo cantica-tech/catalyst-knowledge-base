@@ -32,7 +32,9 @@ any other, so knowledge bases are built off any project. Install it with `cataly
 beside the module that already governs a project, or with `catalyst init --module knowledge-base` as a criterion's
 only module. It needs kernel 0.107.0 or later: its guards hold field conditions, its sources fall due, its builds can
 be governed by a workflow and a conditional gate, and a module's own catalyst project file never ships. It is
-catalyst's second production module, the proof in catalyst's CI that the kernel names no module type.
+catalyst's second production module, the proof in catalyst's CI that the kernel names no module type. On kernel
+0.124.0 or later only the Knowledge Curator (`cmd:kb-setup`, `cmd:kb-build`) or an Admin creates a knowledge base or a
+build; an older kernel lets any `/create` holder do it.
 
 **Branches.** Work lands on `development` (the default branch), where CI runs on every push; `main` takes it by a
 pull request from `development`, and each release is tagged on `main`.

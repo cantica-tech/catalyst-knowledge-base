@@ -85,6 +85,11 @@ documents are at least `Internal`.
    onboarding fields, and one `KSOURCE-` per source (the criterion first, for a criterion-based one).
 3. **Name a curator:** a person holding the Knowledge Curator role in catalyst-users (which `/kb-setup` offers to
    provision), or an `Admin`.
+
+Who may create what: on kernel `0.124.0` or later, only a person whose role holds `cmd:kb-setup` creates a `KB-`, and
+only one holding `cmd:kb-build` creates a `KBUILD-`: the Knowledge Curator, or an `Admin` (`cmd:*`). The Knowledge
+Curator role must hold both grants in the provider. A role holding `/create` alone, as another module's roles may,
+creates neither (`created_by_exclusive`, migration `0.124.0`). Anyone may still record a source (`KSOURCE-`).
 4. **Create the repository** (below), with `KB.md` naming the `KB-` ID. Write the Scope and the Structure: the
    knowledge base is `Established`.
 5. **Write each source's Import:** how its documents come in, and the mark they get.
