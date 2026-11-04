@@ -43,7 +43,10 @@ Never lower a mark to fit a build or a backend: leave the document out.
 
 Only a `Knowledge Curator` or an `Admin` runs `/kb-setup`, `/kb-import`,
 `/kb-classify` and `/kb-build`; anyone may run `/kb-refresh` and `/kb-audit`
-(`rr-KB-006`).
+(`rr-KB-006`). On kernel `0.124.0` or later catalyst enforces it for creation:
+a `KB-` is created only with the `cmd:kb-setup` grant and a `KBUILD-` only
+with `cmd:kb-build` (or an Admin's `cmd:*`); `cmd:create` creates neither
+(`created_by_exclusive`).
 
 When the user enters `/kb-setup <kind> <title>`, onboard it (`GUIDE.md`, "Onboarding"). Onboarding always
 happens, whether this module is alone or beside others; every choice is the user's, proposed, never assumed:
